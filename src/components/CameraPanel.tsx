@@ -17,7 +17,9 @@ export default function CameraPanel({ camera, boxes }: { camera: Camera; boxes: 
       {live && (
         <div className="boxes" aria-hidden="true">
           {boxes.map((b, i) => (
-            <div key={i} className="box" style={{ left: `${b.x * 100}%`, top: `${b.y * 100}%`, width: `${b.w * 100}%`, height: `${b.h * 100}%` }} />
+            <div key={i} className="box" style={{ left: `${b.x * 100}%`, top: `${b.y * 100}%`, width: `${b.w * 100}%`, height: `${b.h * 100}%` }}>
+              <span>telefon %{Math.round(b.score * 100)}</span>
+            </div>
           ))}
         </div>
       )}

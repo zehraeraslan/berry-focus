@@ -17,3 +17,8 @@ export function levelFor(seconds: number): AlertLevel {
 export function smooth(history: boolean[], size = 10, need = 6): boolean {
   return history.slice(-size).filter(Boolean).length >= need
 }
+
+/** Telefon bırakıldığında uyarıyı hızlı kapatmak için: son `n` örneğin hepsi boşsa telefon gitmiş sayılır. */
+export function isClear(history: boolean[], n = 4): boolean {
+  return history.length >= n && history.slice(-n).every((v) => !v)
+}

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type MutableRefObject } from 'react'
 import type { ObjectDetector } from '@mediapipe/tasks-vision'
-import { smooth } from '../lib/alertLevel'
+import { isClear, smooth } from '../lib/alertLevel'
 
 // Model ve WASM dosyaları tarayıcıya indirilir; kamera görüntüsü hiçbir yere gönderilmez.
 const WASM_URL = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm'
@@ -10,7 +10,7 @@ const INTERVAL_MS = 200 // saniyede ~5 analiz: laptopu yormaz, uyarı için yete
 
 export type DetectorState = 'off' | 'loading' | 'ready' | 'error'
 /** Kutu koordinatları 0-1 aralığında oran olarak tutulur. */
-export type Box = { x: number; y: number; w: number; h: number }
+export type Box = { x: number; y: number; w: number; h: number; score: number }
 
 export function usePhoneDetector(videoRef: MutableRefObject<HTMLVideoElement | null>, active: boolean) {
   const [state, setState] = useState<DetectorState>('off')
@@ -18,6 +18,7 @@ export function usePhoneDetector(videoRef: MutableRefObject<HTMLVideoElement | n
   const [boxes, setBoxes] = useState<Box[]>([])
   const detectorRef = useRef<ObjectDetector | null>(null)
   const history = useRef<boolean[]>([])
+  const latched = useRef(false)
 
   // Modeli ilk gerektiğinde yükle (sayfa açılışını yavaşlatmaz).
   useEffect(() => {
@@ -32,7 +33,7 @@ export function usePhoneDetector(videoRef: MutableRefObject<HTMLVideoElement | n
           mp.ObjectDetector.createFromOptions(vision, {
             baseOptions: { modelAssetPath: MODEL_URL, delegate },
             runningMode: 'VIDEO',
-            scoreThreshold: 0.35,
+            scoreThreshold: 0.5,
             maxResults: 5,
             categoryAllowlist: ['cell phone'],
           })
@@ -61,6 +62,7 @@ export function usePhoneDetector(videoRef: MutableRefObject<HTMLVideoElement | n
   useEffect(() => {
     if (!active || state !== 'ready') {
       history.current = []
+      latched.current = false
       setPhone(false)
       setBoxes((prev) => (prev.length ? [] : prev))
       return
@@ -81,12 +83,19 @@ export function usePhoneDetector(videoRef: MutableRefObject<HTMLVideoElement | n
                   y: d.boundingBox.originY / video.videoHeight,
                   w: d.boundingBox.width / video.videoWidth,
                   h: d.boundingBox.height / video.videoHeight,
+                  score: d.categories[0]?.score ?? 0,
                 }]
               : [],
           )
           history.current.push(found.length > 0)
           if (history.current.length > 10) history.current.shift()
-          setPhone(smooth(history.current))
+          // Giriş: son 10 örneğin 6'sında telefon. Çıkış: son 4 örnekte hiç telefon yok (hızlı kapanır).
+          if (!latched.current) latched.current = smooth(history.current)
+          else if (isClear(history.current)) {
+            latched.current = false
+            history.current = []
+          }
+          setPhone(latched.current)
           setBoxes((prev) => (prev.length === 0 && found.length === 0 ? prev : found))
         } catch {
           /* tek bir kare hatası döngüyü durdurmasın */

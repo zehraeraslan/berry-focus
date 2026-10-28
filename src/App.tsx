@@ -25,6 +25,13 @@ export default function App() {
   const detector = usePhoneDetector(camera.videoRef, running && camera.state === 'on' && detectOn)
   const level = usePhoneAlert(running && (detector.phone || simulate))
 
+  // "Uyarıyı dene" açık unutulmasın: 25 saniye sonra kendiliğinden kapanır.
+  useEffect(() => {
+    if (!simulate) return
+    const id = setTimeout(() => setSimulate(false), 25_000)
+    return () => clearTimeout(id)
+  }, [simulate])
+
   const setMuted = (v: boolean) => {
     setMutedState(v)
     applyMuted(v)

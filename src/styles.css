@@ -97,3 +97,4 @@ p.lead{font-size:1.08rem;line-height:1.55;max-width:44ch;color:var(--muted)}
 .alert-card h2{font-size:2rem;color:var(--berry-deep)}
 .alert-card p{margin:8px 0 0;color:var(--muted)}
 @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+.box span{position:absolute;right:6px;bottom:4px;transform:scaleX(-1);font:700 .75rem Nunito,sans-serif;color:#fff;background:rgba(232,70,108,.88);padding:1px 8px;border-radius:8px}
