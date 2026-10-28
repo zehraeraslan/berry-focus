@@ -1,4 +1,5 @@
 import type { Camera } from '../hooks/useCamera'
+import type { Box } from '../hooks/usePhoneDetector'
 
 const MESSAGES: Record<string, string> = {
   idle: 'Kamera kapalı.',
@@ -8,11 +9,18 @@ const MESSAGES: Record<string, string> = {
   error: 'Kamera açılamadı. Başka bir uygulama kamerayı kullanıyor olabilir.',
 }
 
-export default function CameraPanel({ camera }: { camera: Camera }) {
+export default function CameraPanel({ camera, boxes }: { camera: Camera; boxes: Box[] }) {
   const live = camera.state === 'on'
   return (
     <div className={'glass cam' + (live ? ' live' : '')}>
       <video ref={camera.attachVideo} playsInline muted style={{ display: live ? 'block' : 'none' }} />
+      {live && (
+        <div className="boxes" aria-hidden="true">
+          {boxes.map((b, i) => (
+            <div key={i} className="box" style={{ left: `${b.x * 100}%`, top: `${b.y * 100}%`, width: `${b.w * 100}%`, height: `${b.h * 100}%` }} />
+          ))}
+        </div>
+      )}
       {!live && (
         <div>
           <p>{MESSAGES[camera.state]}</p>

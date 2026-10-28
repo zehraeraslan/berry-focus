@@ -58,7 +58,7 @@ export function useCamera() {
 
   useEffect(() => () => streamRef.current?.getTracks().forEach((t) => t.stop()), [])
 
-  return { state, start, stop, attachVideo }
+  return { state, start, stop, attachVideo, videoRef }
 }
 
 export type Camera = ReturnType<typeof useCamera>
