@@ -4,7 +4,7 @@
 
 Kamera destekli "benimle çalış" ders çalışma platformu. Süreni seç, çalış. Telefonu eline alırsan Berry seni kademeli olarak uyarır, oturum bitince verimlilik yüzdeni ve kişisel önerilerini görürsün.
 
-**Canlı demo:** _Vercel linki buraya eklenecek_
+**Canlı demo:** https://berry-focus.vercel.app
 
 <!-- Ekran görüntüleri eklendiğinde aşağıdaki satırların başındaki yorum işaretlerini kaldır.
 ![Çalışma ekranı](docs/screenshots/work.png)
