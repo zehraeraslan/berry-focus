@@ -98,3 +98,11 @@ p.lead{font-size:1.08rem;line-height:1.55;max-width:44ch;color:var(--muted)}
 .alert-card p{margin:8px 0 0;color:var(--muted)}
 @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
 .box span{position:absolute;right:6px;bottom:4px;transform:scaleX(-1);font:700 .75rem Nunito,sans-serif;color:#fff;background:rgba(232,70,108,.88);padding:1px 8px;border-radius:8px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.bars{display:flex;align-items:flex-end;gap:10px;height:150px;margin-top:12px}
+.col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;height:100%}
+.col i{display:block;width:100%;max-width:46px;border-radius:12px 12px 6px 6px;background:linear-gradient(180deg,#FF8FAE,var(--berry))}
+.col small{color:var(--muted);font-size:.8rem}
+.srow{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--track);font-size:.95rem}
+.srow:last-child{border-bottom:0}
+@media (max-width:760px){.stats{grid-template-columns:1fr 1fr}}
